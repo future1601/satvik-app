@@ -1,11 +1,22 @@
 import { Image, StyleSheet, Platform } from 'react-native';
+import { Button } from 'react-native-paper';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { signOut } from '../../config/firebase';
 
 export default function HomeScreen() {
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      // Navigation will be handled by the auth state listener in _layout.tsx
+    } catch (error: any) {
+      console.error('Sign out error:', error.message);
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -50,6 +61,13 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
+      <Button 
+        mode="outlined" 
+        onPress={handleSignOut}
+        style={styles.signOutButton}
+      >
+        Sign Out
+      </Button>
     </ParallaxScrollView>
   );
 }
@@ -70,5 +88,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  signOutButton: {
+    marginTop: 16,
+    alignSelf: 'center',
   },
 });
